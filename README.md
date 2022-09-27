@@ -1,4 +1,4 @@
-## Projeto - Guide to Exploratory Data Analysis with Python and SQL Language
+## Project - Guide to Exploratory Data Analysis with Python and SQL Language
 
 In this Project we will present a basic guide to exploratory data analysis using Python Language, SQL Language and SQLite Database. We will use actual publicly available movies, data about data on <a href="http://www.imdb.com/interfaces/">IMDB</a>.
 
@@ -14,3 +14,9 @@ When applying Exploratory Data Analysis we will answer these 10 questions:
 - 8- What is the Number of Films Produced by Country?
 - 9- What are the Top 10 Best Movies?
 - 10- What are the Top 10 Worst Movies?
+
+## Initial steps:
+
+- Install package imdb-sqlite (https://pypi.org/project/imdb-sqlite/): pip install -q imdb-sqlite
+- Install package pycountry (https://pypi.org/project/pycountry/): pip install -q pycountry
+- Download IMDB database: imdb-sqlite
