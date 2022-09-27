@@ -36,3 +36,14 @@ warnings.filterwarnings("ignore")
 
 # Configurado o grid dos graficos
 sns.set_theme(style="whitegrid")
+
+# ================================================================================
+
+# Connect db
+conn = sqlite3.connect("imdb.db")
+
+# Extract table in db
+tabelas = pd.read_sql_query(
+    "SELECT NAME AS 'Table_Name' FROM sqlite_master WHERE type = 'table'", conn)
+
+tabelas.head()
