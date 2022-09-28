@@ -1,6 +1,8 @@
 # Imports
 #  Pacote para expressoes regulares
 import re
+from select import select
+from sys import displayhook
 
 #  Mede o tempo de execucao e ou trabalhar com datas
 import time
@@ -62,3 +64,75 @@ for tabela in tabelas:
     display(resultado)
     print("-"*100)
     print("\n")
+
+
+# =========================================================================
+# Starting the exploratory analysis.
+# =========================================================================
+
+print('1- What are the most common movie categories on IMDB?')
+
+# 1ª Query
+select1 = '''SELECT type, COUNT(*) AS COUNT FROM titles GROUP BY type'''
+
+# Extract result 1ª query
+result1 = pd.read_sql_query(select1, conn)
+
+# Show result
+# print(result1)
+display(result1)
+
+# Calculating the percentage of each type
+result1['percentual'] = (result1['COUNT'] / result1['COUNT'].sum()) * 100
+
+display(result1)
+
+# We're going to create a chart with just 4 categories:
+# The 3 categories with the most titles and 1 category with all the rest
+
+others = {}
+
+# Filter the percentage at 5% and add up the total
+others['COUNT'] = result1[result1['percentual'] < 5]['COUNT'].sum()
+
+# Saves the percentage
+others['percentual'] = result1[result1['percentual'] < 5]['percentual'].sum()
+
+# Adjust the name
+others['type'] = 'others'
+
+# Show
+others
+
+# Filters the result dataframe
+result1 = result1[result1['percentual'] > 5]
+
+# Append com o dataframe de outras categorias
+result1 = result1.append(others, ignore_index=True)
+
+# Ordena o resultado
+result1 = result1.sort_values(by='COUNT', ascending=False)
+
+# Show
+result1.head()
+
+# Ajusta os labels
+labels = [str(result1['type'][i])+' '+'[' +
+          str(round(result1['percentual'][i], 2)) + '%'+']' for i in result1.index]
+
+# Plot
+
+# Mapa de cores
+# https://matplotlib.org/stable/tutorials/colors/colormaps.html
+cs = cm.Set3(np.arange(100))
+
+# Cria a figura
+f = plt.figure()
+
+# Pie Plot
+plt.pie(result1['COUNT'], labeldistance=1, radius=3,
+        colors=cs, wedgeprops=dict(width=0.8))
+plt.legend(labels=labels, loc='center', prop={'size': 12})
+plt.title("Distribuição de Títulos", loc='Center',
+          fontdict={'fontsize': 20, 'fontweight': 20})
+plt.show()
